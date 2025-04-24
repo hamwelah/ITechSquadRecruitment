@@ -80,6 +80,59 @@
       padding: 10px 0; /* Memberikan padding atas dan bawah */
     }
 
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      overflow: auto;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .modal-header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .modal-body {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .modal-footer {
+      text-align: center;
+    }
+
+    .modal .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .modal .close:hover,
+    .modal .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
     /* Media Query untuk Responsif */
     @media (max-width: 600px) {
       header h1 {
@@ -126,22 +179,64 @@
     <button type="submit">Kirim</button>
   </form>
 
+  <!-- Modal untuk Pesan Berhasil -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeSuccessModal">&times;</span>
+      <div class="modal-header">Pendaftaran Berhasil</div>
+      <div class="modal-body">Data Anda berhasil dikirim! Terima kasih sudah bergabung dengan I-Tech Smawa.</div>
+      <div class="modal-footer">
+        <button onclick="document.getElementById('successModal').style.display='none'">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal untuk Pesan Gagal -->
+  <div id="errorModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="closeErrorModal">&times;</span>
+      <div class="modal-header">Pendaftaran Gagal</div>
+      <div class="modal-body">Terjadi kesalahan saat mengirim data. Silakan coba lagi.</div>
+      <div class="modal-footer">
+        <button onclick="document.getElementById('errorModal').style.display='none'">Tutup</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const form = document.getElementById('calon-anggota-form-itech-smawa');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const data = new FormData(form);
-      const response = await fetch('https://script.google.com/macros/s/AKfycbwcV_yDTzEmoZ2Xtlc-KFmHlczvgNcFyk7d3E67bPIxW6dmt_BJ2wJNemFVjLyb6-w2fQ/exec', {
+      const response = await fetch('https://script.google.com/macros/s/AKfycbxq91OURkYwHSyclBIVdS-z8qBcU0h3PpikPkWX16M0zHLrJ0OA08A_0FhHI_MjMWCV1w/exec', {
         method: 'POST',
         body: data
       });
+
       if (response.ok) {
-        alert('Data berhasil dikirim!');
+        document.getElementById('successModal').style.display = 'block'; // Show success modal
         form.reset();
       } else {
-        alert('Gagal mengirim data!');
+        document.getElementById('errorModal').style.display = 'block'; // Show error modal
       }
     });
+
+    // Close modal
+    document.getElementById('closeSuccessModal').onclick = function() {
+      document.getElementById('successModal').style.display = 'none';
+    };
+
+    document.getElementById('closeErrorModal').onclick = function() {
+      document.getElementById('errorModal').style.display = 'none';
+    };
+
+    // Close modal if clicked outside of the modal content
+    window.onclick = function(event) {
+      if (event.target == document.getElementById('successModal') || event.target == document.getElementById('errorModal')) {
+        document.getElementById('successModal').style.display = 'none';
+        document.getElementById('errorModal').style.display = 'none';
+      }
+    };
   </script>
 
   <!-- Footer dengan Copyright -->
